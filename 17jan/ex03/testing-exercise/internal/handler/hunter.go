@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 	"testdoubles/internal/hunter"
@@ -97,6 +98,14 @@ func (h *Hunter) Hunt() http.HandlerFunc {
 		huntDuration, err := h.ht.Hunt(h.pr)
 
 		if err != nil {
+			if errors.Is(err, hunter.ErrCanNotHunt) {
+				response.JSON(w, http.StatusOK, map[string]any{
+					"message":       "caça concluida",
+					"success":       false,
+					"hunt_duration": huntDuration,
+				})
+				return
+			}
 			response.Error(w, http.StatusInternalServerError, "internal error")
 			return
 		}

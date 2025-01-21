@@ -1,3 +1,6 @@
+//go:build !integration_test
+// +build !integration_test
+
 package tests
 
 import (
@@ -172,8 +175,8 @@ func TestHunter_Hunt_Integration(t *testing.T) {
 		{
 			name: "Given a hunt that hunter cannot hunt the prey then return error",
 			want: wantRes{
-				statusCode:   http.StatusInternalServerError,
-				responseBody: `{"status":"Internal Server Error","message":"internal error"}`,
+				statusCode:   http.StatusOK,
+				responseBody: `{"hunt_duration":0,"message":"caça concluida","success":false}`,
 			},
 			tunaPosition: &positioner.Position{X: 90.0, Y: 300.0, Z: 4000.0},
 		},
